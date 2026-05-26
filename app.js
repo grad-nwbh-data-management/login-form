@@ -10,11 +10,18 @@ const session = require("express-session");
 const passport = require("passport");
 
 
+const flash = require("connect-flash");
+
+
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
 const app = express();
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(flash());
 // Sessions (nodig voor Passport)
 app.use(
   session({
@@ -69,10 +76,7 @@ app.set("view engine", "hbs");
 
 
 app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

@@ -9,13 +9,23 @@ router.get("/login", (req, res) => {
 });
 
 // Login POST
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/login"
-  })
-);
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+
+    if (!user) {
+      return res.render("login", {
+        error: info.message,
+        username: req.body.username // 🔥 VERY useful for UX + SIEM
+      });
+    }
+
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.redirect("/dashboard");
+    });
+  })(req, res, next);
+});
 
 // Dashboard (protected)
 router.get("/dashboard", (req, res) => {

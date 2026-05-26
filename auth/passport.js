@@ -5,7 +5,10 @@ const path = require("path");
 // Fake users
 const users = [
   { id: 1, username: "admin", password: "admin123" },
-  { id: 2, username: "student", password: "student123" }
+  { id: 2, username: "student", password: "student123" },
+  { id: 3, username: "jane", password: "password" },
+  { id: 4, username: "john", password: "azerty" },
+  { id: 4, username: "joske", password: "123456" },
 ];
 
 module.exports = function (passport) {
@@ -28,7 +31,7 @@ module.exports = function (passport) {
           JSON.stringify(logEntry) + "\n"
         );
 
-        return done(null, false, { message: "Invalid credentials" });
+        return done(null, false, { message: "Invalid username or password" });
       }
 
       logEntry.success = true;
